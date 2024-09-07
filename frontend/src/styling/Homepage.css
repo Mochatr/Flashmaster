@@ -1,0 +1,72 @@
+.homepage {
+  font-family: 'Arial', sans-serif;
+  background-color: #000; /* Black background */
+  color: #fff; /* White text color */
+  text-align: center;
+  padding: 50px;
+  min-height: 100vh;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar li {
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff; /* White font color */
+}
+
+.header {
+  margin-top: 50px;
+}
+
+.intro-button {
+  background: #fff; /* White button background */
+  color: #000; /* Black text */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.header h1 {
+  font-size: 3em;
+  color: #fff; /* White text */
+}
+
+.header h1 span {
+  color: #7873f5; /* Purple color for 'Winning Pitches' */
+}
+
+.header p {
+  color: #fff; /* White font color */
+  margin-top: 20px;
+}
+
+.email-section {
+  margin-top: 30px;
+}
+
+.email-input {
+  padding: 10px;
+  width: 250px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.join-button {
+  background: #7873f5; /* Purple button background */
+  color: #fff; /* White text color */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
