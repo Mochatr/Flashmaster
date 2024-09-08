@@ -1,72 +1,110 @@
 .homepage {
   font-family: 'Arial', sans-serif;
-  background-color: #000; /* Black background */
-  color: #fff; /* White text color */
+  background-color: #ffdab9; /* Peach background */
+  color: #000; /* Black text color */
   text-align: center;
-  padding: 50px;
-  min-height: 100vh;
+  min-height: 100vh; /* Ensures the page takes full height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Space out content and footer */
 }
 
-.navbar ul {
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  margin-bottom: 30px;
+}
+
+.nav-left {
+  font-weight: bold;
+  color: #000; /* Black text */
+}
+
+.nav-center {
   list-style: none;
   display: flex;
-  justify-content: center;
   gap: 30px;
   padding: 0;
   margin: 0;
 }
 
-.navbar li {
+.nav-center li {
   cursor: pointer;
   font-weight: bold;
-  color: #fff; /* White font color */
+  color: #000; /* Black text */
+}
+
+.nav-right {
+  cursor: pointer;
+  font-weight: bold;
+  color: #000; /* Black text */
 }
 
 .header {
-  margin-top: 50px;
-}
-
-.intro-button {
-  background: #fff; /* White button background */
-  color: #000; /* Black text */
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-.header h1 {
-  font-size: 3em;
-  color: #fff; /* White text */
-}
-
-.header h1 span {
-  color: #7873f5; /* Purple color for 'Winning Pitches' */
-}
-
-.header p {
-  color: #fff; /* White font color */
   margin-top: 20px;
 }
 
-.email-section {
-  margin-top: 30px;
+.header h1 {
+  font-size: 2.5em;
+  color: #000; /* Black text */
 }
 
-.email-input {
-  padding: 10px;
-  width: 250px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 5px;
+.header h1 span {
+  color: #be07a3a9; /* Purple color */
 }
 
-.join-button {
-  background: #7873f5; /* Purple button background */
+.header {
+  flex: 1; /* Allows the header to grow to fill space */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center content vertically */
+  margin-top: 0; /* Remove top margin */
+  padding: 0 20px; /* Padding for responsiveness */
+}
+
+.action-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center; /* Center button horizontally */
+}
+
+.get-started-button {
+  background: #32cd32; /* Green button background */
   color: #fff; /* White text color */
   border: none;
-  padding: 10px 20px;
+  padding: 6px 15px; /* Adjusted padding for a smaller button */
   cursor: pointer;
   border-radius: 5px;
+  font-weight: bold;
+  font-size: 0.9em; /* Slightly smaller font size */
+  display: inline-block; /* Ensures button takes only the width it needs */
+  margin: 0 auto; /* Centers button horizontally */
+}
+
+.footer {
+  width: 100%; /* Make footer full width */
+  background-color: #000; /* Black background */
+  color: #fff; /* White text */
+  padding: 20px;
+  text-align: center;
+  position: relative; /* Changed from static to relative */
+  bottom: 0;
+}
+
+body {
+  margin: 0; /* Removes default body margin */
+  padding: 0; /* Removes default body padding */
+  overflow-x: hidden; /* Prevents horizontal scroll caused by overflow */
+}
+
+.homepage {
+  width: 100%; /* Ensures homepage takes the full width */
+  overflow-x: hidden; /* Ensures no horizontal overflow */
+}
+
+.header, .footer {
+  width: 100%; /* Ensures header and footer take the full width */
 }

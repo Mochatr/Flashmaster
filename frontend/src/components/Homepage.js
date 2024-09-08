@@ -1,30 +1,55 @@
 import React from 'react';
-import '../styling/Homepage.css'; // Assuming you have a separate CSS file for styling
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for navigation
+import '../styling/Homepage.css'; // Import your CSS file for styling
 
 const Homepage = () => {
+  const navigate = useNavigate(); // Initialize the navigate function from react-router-dom
+
+  // Simulate user authentication status for demonstration purposes
+  const isLoggedIn = false; // Replace with actual logic to check if the user is logged in
+
+  // Navigation handlers
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+
+  const handleSignupClick = () => {
+    navigate('/signup');
+  };
+
+  const handleHomeClick = () => {
+    if (isLoggedIn) {
+      navigate('/dashboard'); // Redirect to dashboard if logged in
+    } else {
+      navigate('/'); // Redirect to homepage if not logged in
+    }
+  };
+
   return (
     <div className="homepage">
       <nav className="navbar">
-        <ul>
+        <div className="nav-left" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>FlashMaster</div>
+        <ul className="nav-center">
           <li>About</li>
-          <li>Process</li>
           <li>Features</li>
           <li>Meet the Team</li>
         </ul>
+        <div className="nav-right" onClick={handleLoginClick} style={{ cursor: 'pointer' }}>Login</div>
       </nav>
 
       <header className="header">
-        <button className="intro-button">Introducing FlashMaster Pro</button>
         <h1>Welcome to <span>FlashMaster Pro</span></h1>
         <p>Your personal flashcard learning app!</p>
 
-        <div className="email-section">
-          <input type="email" placeholder="Enter your email" className="email-input" />
-          <button className="join-button">Join Waitlist</button>
+        <div className="action-section">
+          <button className="get-started-button" onClick={handleSignupClick}>Get Started</button>
         </div>
       </header>
+
+      <footer className="footer">
+        <p>&copy; 2024 FlashMaster. All rights reserved.</p>
+      </footer>
     </div>
-    
   );
 };
 
