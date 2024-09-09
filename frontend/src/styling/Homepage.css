@@ -13,13 +13,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px;
+  padding: 15px 30px;
   margin-bottom: 30px;
 }
 
 .nav-left {
   font-weight: bold;
-  color: #000; /* Black text */
+  color: #be07a3a9; /* Black text */
 }
 
 .nav-center {
@@ -62,7 +62,7 @@
   align-items: center;
   justify-content: center; /* Center content vertically */
   margin-top: 0; /* Remove top margin */
-  padding: 0 20px; /* Padding for responsiveness */
+  font-size: 20px; /* Increase font size */
 }
 
 .action-section {
@@ -83,12 +83,11 @@
   display: inline-block; /* Ensures button takes only the width it needs */
   margin: 0 auto; /* Centers button horizontally */
 }
-
 .footer {
   width: 100%; /* Make footer full width */
   background-color: #000; /* Black background */
   color: #fff; /* White text */
-  padding: 20px;
+  padding: 1px; /* Decreased padding to make it thin */
   text-align: center;
   position: relative; /* Changed from static to relative */
   bottom: 0;
