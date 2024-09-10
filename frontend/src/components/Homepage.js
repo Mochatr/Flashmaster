@@ -9,12 +9,8 @@ const Homepage = () => {
   const isLoggedIn = false; // Replace with actual logic to check if the user is logged in
 
   // Navigation handlers
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
-  const handleSignupClick = () => {
-    navigate('/signup');
+  const handleLoginSignUpClick = () => {
+    navigate('/Authenticate'); // Redirect to the login/signup page
   };
 
   const handleHomeClick = () => {
@@ -34,7 +30,7 @@ const Homepage = () => {
           <li>Features</li>
           <li>Meet the Team</li>
         </ul>
-        <div className="nav-right" onClick={handleLoginClick} style={{ cursor: 'pointer' }}>Login</div>
+        <div className="nav-right" onClick={handleLoginSignUpClick} style={{ cursor: 'pointer' }}>Login</div>
       </nav>
 
       <header className="header">
@@ -42,7 +38,7 @@ const Homepage = () => {
         <p>Your personal flashcard learning app!</p>
 
         <div className="action-section">
-          <button className="get-started-button" onClick={handleSignupClick}>Get Started</button>
+          <button className="get-started-button" onClick={handleLoginSignUpClick}>Get Started</button>
         </div>
       </header>
 
