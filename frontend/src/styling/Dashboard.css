@@ -1,0 +1,226 @@
+body {
+  background-color: #ffdab9; /* Peach background */
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.dashboard-navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  color: #fff;
+}
+
+.nav-left {
+  font-weight: bold;
+  color: #be07a3a9; /* Black text */
+}
+.nav-right {
+  cursor: pointer;
+  font-weight: bold;
+  color: #000; /* Black text */
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+.content {
+  flex: 3;
+  padding: 1rem;
+}
+
+.centered-form {
+  background-color: #be07a3a9; /* Purplish */
+  padding: 1rem;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.input-field {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.action-button {
+  background-color: #32cd32; /* Green */
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.random-button {
+  background-color: #000; /* Black */
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.sidebar {
+  flex: 1;
+  background-color: #fff; /* White */
+  padding: 1rem;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.deck-button, .ai-pro-button {
+  background-color: #32cd32; /* Green */
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.deck-overview {
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.card-preview {
+  background-color: #be07a3a9; /* Purplish */
+  color: #fff;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+}
+
+.footer {
+  background-color: #000; /* Black */
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
+body {
+  background-color: #ffdab9; /* Peach background */
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.dashboard-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  margin-bottom: 30px;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+.content {
+  flex: 3;
+  padding: 1rem;
+}
+
+.centered-form {
+  background-color: #ffdab9; /* Purplish */
+  padding: 1rem;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.input-field {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.action-button {
+  background-color: #000000; /* Green */
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.random-button {
+  background-color: #000; /* Black */
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+}
+
+.sidebar {
+  flex: 1;
+  background-color: #ffdab9; /* White */
+  padding: 1rem;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.deck-button, .ai-pro-button {
+  background-color: #000000; /* Green */
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.deck-overview {
+  padding: 1rem;
+  background-color: #ffdab9; /* Peach */
+}
+
+h2 {
+  color: #000; /* Black */
+  text-align: center;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust grid */
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.card-preview {
+  background-color: #fff;
+  color: #000;
+  padding: 2rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 1px solid #000000; /* Green border */
+}
+
+.footer {
+  background-color: #000; /* Black */
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
