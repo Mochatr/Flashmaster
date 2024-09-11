@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+
 .homepage {
-  font-family: 'Arial', sans-serif;
-  background-color: #ffdab9; /* Peach background */
+  font-family: 'Poppins', sans-serif;
+  background-color: #e3e8f8; /* Peach background */
   color: #000; /* Black text color */
   text-align: center;
   min-height: 100vh; /* Ensures the page takes full height */
@@ -44,6 +47,7 @@
 
 .header {
   margin-top: 20px;
+  font-family: "Poppins", sans-serif; /* Use Poppins font */
 }
 
 .header h1 {
