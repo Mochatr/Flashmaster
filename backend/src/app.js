@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 require('dotenv').config();
 
-const app = express();
+const deckRoutes = require('./routes/deckroutes');
 
-// Middleware
+const app = express();
+app.use(cors());
 app.use(express.json());
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -20,6 +23,8 @@ mongoose.connect(process.env.MONGO_URI, {
 app.get('/', (req, res) => {
   res.send('FlashMaster Pro backend is running');
 });
+
+app.use('/api', deckRoutes);;
 
 // Start the server
 const PORT = process.env.PORT || 5000;
