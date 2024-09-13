@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-const deckRoutes = require('./routes/deckroutes');
+const deckRoutes = require('./routes/deckCardRoutes');
 
 const app = express();
 app.use(cors());

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styling/Dashboard.css'; // Adjust path as needed
+import FlashCard from './card';
+
+import '../styling/Dashboard.css';
 
 const Dashboard = () => {
   const [decks, setDecks] = useState([]);
@@ -36,9 +38,8 @@ const Dashboard = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: deckTitle,
+          deckName: deckTitle,
           description: deckDescription,
-          // For now, user ID is hardcoded; update it with actual user ID when authentication is in place
           owner: 'Sohail', // Placeholder for actual user ID
         }),
       });
@@ -68,8 +69,11 @@ const Dashboard = () => {
           owner: 'Sohail', // Placeholder for actual user ID
         }),
       });
-      const updatedDeck = await response.json();
-      setDecks(decks.map(deck => deck._id === selectedDeckId ? updatedDeck : deck));
+      //const newCard = await response.json();
+  
+      // Refetch the deck data to ensure we have the latest info
+      await handleDeckSelection(selectedDeckId);
+  
       setCardQuestion('');
       setCardAnswer('');
       setCardTags('');
@@ -78,6 +82,7 @@ const Dashboard = () => {
       console.error('Error adding card to deck:', error);
     }
   };
+  
 
   const handleDeckSelection = async (deckId) => {
     try {
@@ -89,9 +94,10 @@ const Dashboard = () => {
       console.error('Error fetching deck:', error);
     }
   };
+  
 
   const handleLogoutClick = () => {
-    navigate('/login');
+    navigate('/Authenticate');
   };
 
   const handleHomeClick = () => {
@@ -137,7 +143,7 @@ const Dashboard = () => {
               <option value="">Select Deck</option>
               {decks.map(deck => (
                 <option key={deck._id} value={deck._id}>
-                  {deck.title}
+                  {deck.deckName}
                 </option>
               ))}
             </select>
@@ -185,7 +191,7 @@ const Dashboard = () => {
               className="deck-button"
               onClick={() => handleDeckSelection(deck._id)}
             >
-              {deck.title}
+              {deck.deckName}
             </button>
           ))}
         </div>
@@ -193,21 +199,16 @@ const Dashboard = () => {
 
       {/* Bottom Section for Flashcards */}
       <div className="deck-overview">
-        {selectedDeck && (
+      {selectedDeck && (
           <>
-            <h2>My Cards in "{selectedDeck.title}"</h2>
+            <h2>My Cards in "{selectedDeck.deckName}"</h2>
             <div className="card-grid">
               {selectedDeck.cards.map((card, index) => (
-                <div key={index} className="card-preview">
-                  <p><strong>Question:</strong> {card.question}</p>
-                  <p><strong>Answer:</strong> {card.answer}</p>
-                  {card.tags && card.tags.length > 0 && (
-                    <p><strong>Tags:</strong> {card.tags.join(', ')}</p>
-                  )}
-                  {card.difficulty && (
-                    <p><strong>Difficulty:</strong> {card.difficulty}</p>
-                  )}
-                </div>
+                <FlashCard
+                  key={index}
+                  question={card.question}
+                  answer={card.answer}
+                />
               ))}
             </div>
           </>
