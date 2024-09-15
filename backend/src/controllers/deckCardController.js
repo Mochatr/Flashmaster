@@ -61,6 +61,27 @@ exports.deleteDeck = async (req, res) => {
     res.status(500).json({ message: 'Error deleting deck', error });
   }
 };
+// updateDeck a Deck by ID
+exports.updateDeck = async (req, res) => {
+  try {
+    const { deckId } = req.params;
+    const { deckName, description } = req.body;
+
+    const deck = await DeckCard.findById(deckId);
+    if (!deck) {
+      return res.status(404).json({ message: 'Deck not found' });
+    }
+
+    deck.deckName = deckName || deck.deckName;
+    deck.description = description || deck.description;
+    deck.updatedAt = new Date();
+
+    const updatedDeck = await deck.save();
+    res.status(200).json(updatedDeck);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating deck', error });
+  }
+};
 
 // Add a New Card to a Deck
 exports.addCardToDeck = async (req, res) => {
@@ -108,6 +129,27 @@ exports.getDeckCards = async (req, res) => {
   }
 };
 
+
+// Get a Single card by ID from a deck by ID
+exports.getCard = async (req, res) => {
+  try {
+    const { deckId, cardId } = req.params;
+
+    const deck = await DeckCard.findById(deckId);
+    if (!deck) {
+      return res.status(404).json({ message: 'Deck not found' });
+    }
+
+    const card = deck.cards.find((card) => card._id.toString() === cardId);
+    if (!card) {
+      return res.status(404).json({ message: 'Card not found' });
+    }
+
+    res.status(200).json(card);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving card', error });
+  }
+};
 // Update a Card in a Deck
 exports.updateCardInDeck = async (req, res) => {
   try {

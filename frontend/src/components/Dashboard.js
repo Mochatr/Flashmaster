@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FlashCard from './card';
-
+import RandomCardsPopup from './randomCardsPopup';
+import Flashcard from './flashcard';
 import '../styling/Dashboard.css';
 
 const Dashboard = () => {
@@ -14,11 +14,11 @@ const Dashboard = () => {
   const [cardTags, setCardTags] = useState('');
   const [cardDifficulty, setCardDifficulty] = useState('');
   const [selectedDeck, setSelectedDeck] = useState(null);
+  const [showRandomPopup, setShowRandomPopup] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch all decks when the component mounts
     fetchDecks();
   }, []);
 
@@ -40,7 +40,7 @@ const Dashboard = () => {
         body: JSON.stringify({
           deckName: deckTitle,
           description: deckDescription,
-          owner: 'Sohail', // Placeholder for actual user ID
+          owner: 'Sohail',
         }),
       });
       const newDeck = await response.json();
@@ -66,14 +66,10 @@ const Dashboard = () => {
           answer: cardAnswer,
           tags: cardTags ? cardTags.split(',').map(tag => tag.trim()) : [],
           difficulty: cardDifficulty,
-          owner: 'Sohail', // Placeholder for actual user ID
+          owner: 'Sohail',
         }),
       });
-      //const newCard = await response.json();
-  
-      // Refetch the deck data to ensure we have the latest info
       await handleDeckSelection(selectedDeckId);
-  
       setCardQuestion('');
       setCardAnswer('');
       setCardTags('');
@@ -82,7 +78,6 @@ const Dashboard = () => {
       console.error('Error adding card to deck:', error);
     }
   };
-  
 
   const handleDeckSelection = async (deckId) => {
     try {
@@ -94,7 +89,6 @@ const Dashboard = () => {
       console.error('Error fetching deck:', error);
     }
   };
-  
 
   const handleLogoutClick = () => {
     navigate('/Authenticate');
@@ -104,9 +98,91 @@ const Dashboard = () => {
     navigate('/');
   };
 
+  const handleRandomCardsClick = () => {
+    setShowRandomPopup(true);
+  };
+
+  const handleCardModification = async (deckId, cardId) => {
+    const updatedQuestion = prompt('Enter new question:');
+    const updatedAnswer = prompt('Enter new answer:');
+    const updatedTags = prompt('Enter new tags (comma-separated):');
+    const updatedDifficulty = prompt('Enter new difficulty (easy, medium, hard):');
+
+    if (updatedQuestion && updatedAnswer) {
+      try {
+        await fetch(`http://localhost:5000/api/decks/${deckId}/cards/${cardId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            question: updatedQuestion,
+            answer: updatedAnswer,
+            tags: updatedTags ? updatedTags.split(',').map(tag => tag.trim()) : [],
+            difficulty: updatedDifficulty,
+          }),
+        });
+        await handleDeckSelection(deckId); // Refresh deck data after modification
+      } catch (error) {
+        console.error('Error updating card:', error);
+      }
+    }
+  };
+
+  const handleCardDeletion = async (deckId, cardId) => {
+    if (window.confirm('Are you sure you want to delete this card?')) {
+      try {
+        await fetch(`http://localhost:5000/api/decks/${deckId}/cards/${cardId}`, {
+          method: 'DELETE',
+        });
+        await handleDeckSelection(deckId); // Refresh deck data after deletion
+      } catch (error) {
+        console.error('Error deleting card:', error);
+      }
+    }
+  };
+
+  const handleDeckModification = async (deckId) => {
+    const updatedTitle = prompt('Enter new deck title:');
+    const updatedDescription = prompt('Enter new deck description:');
+
+    if (updatedTitle) {
+      try {
+        await fetch(`http://localhost:5000/api/decks/${deckId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            deckName: updatedTitle,
+            description: updatedDescription,
+          }),
+        });
+        await fetchDecks(); // Refresh all decks data
+        if (selectedDeckId === deckId) {
+          await handleDeckSelection(deckId); // Refresh selected deck data
+        }
+      } catch (error) {
+        console.error('Error updating deck:', error);
+      }
+    }
+  };
+
+  const handleDeckDeletion = async (deckId) => {
+    if (window.confirm('Are you sure you want to delete this deck?')) {
+      try {
+        await fetch(`http://localhost:5000/api/decks/${deckId}`, {
+          method: 'DELETE',
+        });
+        await fetchDecks(); // Refresh all decks data
+        if (selectedDeckId === deckId) {
+          setSelectedDeck(null);
+          setSelectedDeckId('');
+        }
+      } catch (error) {
+        console.error('Error deleting deck:', error);
+      }
+    }
+  };
+
   return (
     <div className="dashboard">
-      {/* Top Section */}
       <nav className="dashboard-navbar">
         <div className="nav-left" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>FlashMaster</div>
         <div className="nav-right">
@@ -115,7 +191,6 @@ const Dashboard = () => {
       </nav>
 
       <div className="main-content">
-        {/* Left Section - Form */}
         <div className="content">
           <div className="flashcard-creation centered-form">
             <h2>Create Your Deck</h2>
@@ -134,6 +209,8 @@ const Dashboard = () => {
               className="input-field"
             />
             <button className="action-button" onClick={handleDeckCreation}>Create Deck</button>
+            <button onClick={handleRandomCardsClick} className="random-cards-button">Random Cards</button>
+
             <h2>Add Card to Deck</h2>
             <select
               value={selectedDeckId}
@@ -182,7 +259,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Sidebar/Right Section */}
         <div className="sidebar">
           <button className="ai-pro-button">← AI Pro</button>
           {decks.map(deck => (
@@ -192,33 +268,36 @@ const Dashboard = () => {
               onClick={() => handleDeckSelection(deck._id)}
             >
               {deck.deckName}
+              <button onClick={() => handleDeckModification(deck._id)}>Modify</button>
+              <button onClick={() => handleDeckDeletion(deck._id)}>Delete Deck</button>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Bottom Section for Flashcards */}
-      <div className="deck-overview">
+      
       {selectedDeck && (
-          <>
-            <h2>My Cards in "{selectedDeck.deckName}"</h2>
-            <div className="card-grid">
-              {selectedDeck.cards.map((card, index) => (
-                <FlashCard
-                  key={index}
-                  question={card.question}
-                  answer={card.answer}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+  <div className="selected-deck">
+    {selectedDeck.cards && selectedDeck.cards.length > 0 ? (
+      <Flashcard 
+        selectedDeck={selectedDeck} 
+        onModify={(deckId, cardId) => handleCardModification(deckId, cardId)}
+        onDelete={(deckId, cardId) => handleCardDeletion(deckId, cardId)} 
+      />
+    ) : (
+      <p>No cards in this deck.</p>
+    )}
+  </div>
+)}
 
-      {/* Footer */}
-      <footer className="footer">
-        © 2024 FlashMaster. All rights reserved.
-      </footer>
+
+<footer className='footer'>
+© 2024 FlashMaster. All rights reserved.
+</footer>
+{showRandomPopup && (
+            <RandomCardsPopup decks={decks} setShowRandomPopup={setShowRandomPopup} />
+        )}
+        
     </div>
   );
 };

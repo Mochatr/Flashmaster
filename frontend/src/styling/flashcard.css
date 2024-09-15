@@ -1,0 +1,179 @@
+/* General Deck Container Styling */
+.deck-container {
+  width: 100%;
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background */
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 40px;
+}
+
+/* Deck Header */
+.deck-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.deck-title {
+  font-size: 2.2em;
+  color: #32cd32; /* Green */
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.deck-description {
+  font-size: 1.2em;
+  color: #666; /* Light gray */
+}
+
+/* Cards Container */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Container to hold card and actions */
+.card-container {
+  display: inline-block;
+  margin: 20px;
+  text-align: center;
+}
+
+/* Card Flip Effect */
+.card {
+  width: 250px;
+  height: 200px;
+  perspective: 1000px;
+  cursor: pointer;
+  margin: 10px;
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Soft shadow */
+  transition: transform 0.4s; /* Smooth transition */
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  border-radius: 15px; /* Rounded corners */
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box; /* Ensures padding is included in width/height */
+  border-radius: 15px; /* Rounded corners */
+}
+
+.card-front {
+  background-color: #fff; /* White background */
+  color: #000; /* Black text */
+}
+
+.card-back {
+  background-color: #32cd32; /* Green background */
+  color: #fff; /* White text */
+  transform: rotateY(180deg);
+}
+
+/* Card Action Buttons */
+.card-actions {
+  margin-top: 10px;
+}
+
+.card-actions button {
+  margin: 5px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
+}
+
+.modify-button {
+  background-color: #be07a3a9; /* Purplish */
+  color: #fff;
+}
+
+.modify-button:hover {
+  background-color: #96077a; /* Darker purplish */
+}
+
+.delete-button {
+  background-color: #ff6b6b; /* Light red */
+  color: #fff;
+}
+
+.delete-button:hover {
+  background-color: #d9534f; /* Darker red */
+}
+
+/* Text Styling */
+.card h4 {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.card p {
+  margin: 10px 0 0;
+  font-size: 1em;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .deck-title {
+    font-size: 1.8em;
+  }
+
+  .deck-description {
+    font-size: 1em;
+  }
+
+  .card {
+    width: 200px;
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .deck-title {
+    font-size: 1.5em;
+  }
+
+  .deck-description {
+    font-size: 0.9em;
+  }
+
+  .card {
+    width: 150px;
+    height: 120px;
+  }
+
+  .card h4 {
+    font-size: 1em;
+  }
+
+  .card p {
+    font-size: 0.9em;
+  }
+
+  .card-actions button {
+    padding: 6px 12px;
+    font-size: 0.9em;
+  }
+}
