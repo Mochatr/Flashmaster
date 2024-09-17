@@ -47,5 +47,6 @@ const deckCardSchema = new Schema({
   }
 });
 
+
 const DeckCard = mongoose.model('DeckCard', deckCardSchema);
 module.exports = DeckCard;

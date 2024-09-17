@@ -4,6 +4,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 const deckRoutes = require('./routes/deckCardRoutes');
+const userRoutes = require('./routes/userRoutes');
+const { unstable_renderSubtreeIntoContainer } = require('react-dom');
 
 const app = express();
 app.use(cors());
@@ -23,6 +25,8 @@ mongoose.connect(process.env.MONGO_URI, {
 app.get('/', (req, res) => {
   res.send('FlashMaster Pro backend is running');
 });
+
+app.use('/api', userRoutes);
 
 app.use('/api', deckRoutes);;
 

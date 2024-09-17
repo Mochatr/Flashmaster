@@ -5,23 +5,77 @@ import user_icon from '../assets/person.png';
 import email_icon from '../assets/email.png';
 import password_icon from '../assets/password.png';
 
+import { useNavigate } from 'react-router-dom';
+
 const LoginSignup = () => {
+  const [action, setAction] = useState('Login');
+  const navigate = useNavigate();
 
-  const [action, setAction] = useState('Login'); 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // login or signup logic here
+    const email = document.querySelector('input[type="email"]').value;
+    const password = document.querySelector('input[type="password"]').value;
+    const username = action === 'Sign Up' ? document.querySelector('input[type="text"]').value : null;
 
+    console.log(action === 'Login' ? 'Logging in' : 'Signing up', { username, email, password });
 
-    return (
-      <div className="container">
+    if (action === 'Login') {
+      // Perform login
+      console.log('Logging in with', { email, password });
+      // Add your login API call here
+      fetch('http://localhost:5000/api/finduser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log('Login response:', data);
+          navigate('/dashboard');
+        })
+        .catch((error) => {
+          console.error('Login error:', error);
+        });
+
+    } else {
+      // Perform signup
+      console.log('Signing up with', { username, email, password });
+      // Add your signup API call here
+      fetch('http://localhost:5000/api/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      })
+      .then((res) => res.json())
+        .then((data) => {
+          console.log('Signup response:', data);
+          navigate('/dashboard');
+        })
+        .catch((error) => {
+          console.error('Signup error:', error);
+    });
+    }
+  };
+
+  return (
+    <div className="container">
+      <form onSubmit={handleSubmit}> {/* Form element with onSubmit handler */}
         <div className="header">
           <div className="text">{action}</div>
           <div className="underline"></div>
         </div>
         <div className="inputs">
-          {action==="Login"?<div></div>:<div className="input">
-            <img src={user_icon} alt="" />
-            <input type="text" placeholder="Name" />
-          </div>}
-
+          {action === "Sign Up" && (
+            <div className="input">
+              <img src={user_icon} alt="" />
+              <input type="text" placeholder="Name" />
+            </div>
+          )}
           <div className="input">
             <img src={email_icon} alt="" />
             <input type="email" placeholder="Email" />
@@ -31,13 +85,15 @@ const LoginSignup = () => {
             <input type="password" placeholder="Password" />
           </div>
         </div>
-        {action==="Sign Up"?<div></div>:<div className="forgot-password">Lost your password? <span>Click Here!</span></div>}
         <div className="submit-container">
-         <div className={action==="Login"?"submit gray":"submit"} onClick={()=>{setAction("Sign Up")}}>Sign Up</div>
-         <div className={action==="Sign Up"?"submit gray":"submit"} onClick={()=>{setAction("Login")}}>Login</div>
+          <button type="submit" className="submit">{action}</button> {/* Submit button */}
+          <div onClick={() => setAction(action === "Login" ? "Sign Up" : "Login")}>
+            Switch to {action === "Login" ? "Sign Up" : "Login"}
+          </div>
         </div>
-     </div>
-    );
+      </form>
+    </div>
+  );
 };
 
 export default LoginSignup;
