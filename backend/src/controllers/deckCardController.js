@@ -154,7 +154,7 @@ exports.getCard = async (req, res) => {
 exports.updateCardInDeck = async (req, res) => {
   try {
     const { deckId, cardId } = req.params;
-    const { question, answer, difficulty, tags } = req.body;
+    const { question, answer, difficulty, tags, known, hard } = req.body;
 
     const deck = await DeckCard.findById(deckId);
     if (!deck) {
@@ -172,6 +172,9 @@ exports.updateCardInDeck = async (req, res) => {
     card.difficulty = difficulty || card.difficulty;
     card.tags = tags || card.tags;
     card.updatedAt = new Date();
+    card.known = known !== undefined ? known : card.known;
+    card.hard = hard !== undefined ? hard : card.hard;
+    card.lastReviewed = new Date();
 
     deck.cards[cardIndex] = card;
     const updatedDeck = await deck.save();
@@ -180,6 +183,7 @@ exports.updateCardInDeck = async (req, res) => {
     res.status(500).json({ message: 'Error updating card', error });
   }
 };
+
 
 // Delete a Card from a Deck
 exports.deleteCardFromDeck = async (req, res) => {
@@ -203,5 +207,41 @@ exports.deleteCardFromDeck = async (req, res) => {
     res.status(200).json(updatedDeck.cards);  // Return the updated list of cards
   } catch (error) {
     res.status(500).json({ message: 'Error deleting card', error });
+  }
+};
+
+
+// Get all known cards for a specific deck
+exports.getKnownCards = async (req, res) => {
+  try {
+    const { deckId } = req.params;
+    console.log(deckId);
+
+    const deck = await DeckCard.findById(deckId);
+    if (!deck) {
+      return res.status(404).json({ message: 'Deck not found' });
+    }
+
+    const knownCards = deck.cards.filter((card) => card.known);
+    res.status(200).json(knownCards);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving known cards', error });
+  }
+};
+
+// Get all hard cards for a specific deck
+exports.getHardCards = async (req, res) => {
+  try {
+    const { deckId } = req.params;
+
+    const deck = await DeckCard.findById(deckId);
+    if (!deck) {
+      return res.status(404).json({ message: 'Deck not found' });
+    }
+
+    const hardCards = deck.cards.filter((card) => card.hard);
+    res.status(200).json(hardCards);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving hard cards', error });
   }
 };

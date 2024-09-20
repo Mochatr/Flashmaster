@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 const RandomCardViewer = ({ deckId, onClose }) => {
-    // set of cards
     const [cards, setCards] = useState([]);
-    // current card so we can track which card is next and also is the prev
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
-    // flipping the card
     const [showAnswer, setShowAnswer] = useState(false);
 
     useEffect(() => {
@@ -16,7 +13,6 @@ const RandomCardViewer = ({ deckId, onClose }) => {
         try {
             const response = await fetch(`http://localhost:5000/api/decks/${deckId}/cards`);
             const data = await response.json();
-            // Shuffle cards
             const shuffledCards = data.sort(() => Math.random() - 0.5);
             setCards(shuffledCards);
         } catch (error) {
@@ -42,6 +38,40 @@ const RandomCardViewer = ({ deckId, onClose }) => {
         }
     };
 
+    const handleKnowIt = async () => {
+        try {
+            const cardId = cards[currentCardIndex]._id;
+            await fetch(`http://localhost:5000/api/decks/${deckId}/cards/${cardId}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ known: true, hard: false })
+            });
+            // just go to next card
+            handleNext();
+        } catch (error) {
+            console.error('Error marking card as known:', error);
+        }
+    };
+
+    const handleHard = async () => {
+        try {
+            const cardId = cards[currentCardIndex]._id;
+            await fetch(`http://localhost:5000/api/decks/${deckId}/cards/${cardId}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ hard: true })
+            });
+            // just go to next card
+            handleNext();
+        } catch (error) {
+            console.error('Error marking card as hard:', error);
+        }
+    };
+
     return (
         <div className="random-card-viewer">
             {cards.length > 0 && (
@@ -59,6 +89,10 @@ const RandomCardViewer = ({ deckId, onClose }) => {
             <div className="navigation-buttons">
                 <button onClick={handleBack} disabled={currentCardIndex === 0}>Back</button>
                 <button onClick={handleNext} disabled={currentCardIndex === cards.length - 1}>Next</button>
+            </div>
+            <div className="action-buttons">
+                <button onClick={handleKnowIt}>I know it</button>
+                <button onClick={handleHard}>It's hard</button>
             </div>
             <button onClick={onClose}>Close</button>
         </div>

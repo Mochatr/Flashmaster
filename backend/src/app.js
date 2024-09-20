@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 
 app.use('/api', userRoutes);
 
-app.use('/api', deckRoutes);;
+app.use('/api', deckRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

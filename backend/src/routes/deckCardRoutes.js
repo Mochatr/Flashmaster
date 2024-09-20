@@ -16,4 +16,14 @@ router.put('/decks/:deckId/cards/:cardId', deckCardController.updateCardInDeck);
 router.delete('/decks/:deckId/cards/:cardId', deckCardController.deleteCardFromDeck);  // Delete a specific card from a deck
 router.get('/decks/:deckId/cards/:cardId', deckCardController.getCard);  // get a specific card from a deck
 
+// Mark card as known or hard
+router.put('/decks/:deckId/cards/:cardId/status', deckCardController.updateCardInDeck);
+
+
+// Get all known cards for a specific deck
+router.get('/decks/:deckId/known-cards', deckCardController.getKnownCards);
+
+// Get all hard cards for a specific deck
+router.get('/decks/:deckId/hard-cards', deckCardController.getHardCards);
+
 module.exports = router;

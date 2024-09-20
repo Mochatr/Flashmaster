@@ -25,7 +25,7 @@ const deckCardSchema = new Schema({
       enum: ['easy', 'medium', 'hard'],
       required: false,
     },
-    tags: [String], // Array of strings for tags
+    tags: [String],
     createdAt: {
       type: Date,
       default: Date.now,
@@ -33,12 +33,21 @@ const deckCardSchema = new Schema({
     updatedAt: {
       type: Date,
       default: Date.now,
+    },
+    known: {
+      type: Boolean,
+      default: false,
+    },
+    hard: {
+      type: Boolean,
+      default: false,
+    },
+    lastReviewed: {
+      type: Date,
     }
   }],
   owner: {
     type: String,
-   /*  ref: 'User',  // Referencing User Model
-    required: true, */ 
     default: 'Sohail'
   },
   createdAt: {

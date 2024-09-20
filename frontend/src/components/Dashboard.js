@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import RandomCardsPopup from './randomCardsPopup';
 import Flashcard from './flashcard';
 import '../styling/Dashboard.css';
@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [cardDifficulty, setCardDifficulty] = useState('');
   const [selectedDeck, setSelectedDeck] = useState(null);
   const [showRandomPopup, setShowRandomPopup] = useState(false);
+  const [progress, setProgress] = useState({ reviewed: 0, known: 0, hard: 0 });
 
   const navigate = useNavigate();
 
@@ -27,9 +28,25 @@ const Dashboard = () => {
       const response = await fetch('http://localhost:5000/api/decks');
       const data = await response.json();
       setDecks(data);
+      calculateProgress(data);
     } catch (error) {
       console.error('Error fetching decks:', error);
     }
+  };
+  const calculateProgress = (decks) => {
+    let reviewed = 0;
+    let known = 0;
+    let hard = 0;
+
+    decks.forEach(deck => {
+      deck.cards.forEach(card => {
+        reviewed++;
+        if (card.known) known++;
+        if (card.hard) hard++;
+      });
+    });
+
+    setProgress({ reviewed, known, hard });
   };
 
   const handleDeckCreation = async () => {
@@ -189,6 +206,12 @@ const Dashboard = () => {
           <div className="logout-button" onClick={handleLogoutClick} style={{ cursor: 'pointer' }}>Log out</div>
         </div>
       </nav>
+      <div className="progress">
+        <h3>Progress</h3>
+        <p>Reviewed: {progress.reviewed}</p>
+        <p>Known: {progress.known}</p>
+        <p>Hard: {progress.hard}</p>
+      </div>
 
       <div className="main-content">
         <div className="content">
@@ -270,6 +293,14 @@ const Dashboard = () => {
               {deck.deckName}
               <button onClick={() => handleDeckModification(deck._id)}>Modify</button>
               <button onClick={() => handleDeckDeletion(deck._id)}>Delete Deck</button>
+              // Inside the deck rendering logic
+            <div key={deck._id}>
+                <h3>{deck.name}</h3>
+                {/* Link to Known Cards */}
+                <Link to={`/decks/${deck._id}/known-cards`}>Known Cards</Link>
+                {/* Link to Hard Cards */}
+                <Link to={`/decks/${deck._id}/hard-cards`}>Hard Cards</Link>
+            </div>
             </button>
           ))}
         </div>
