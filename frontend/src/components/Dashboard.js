@@ -111,6 +111,23 @@ const Dashboard = () => {
     navigate('/Authenticate');
   };
 
+  const handleDeleteClick = async () => {
+    const email = "milan12@gmail.com";
+
+    if (window.confirm('Are you sure you want to delete your account?')) {
+      try {
+        await fetch(`http://localhost:5000/api/deleteuser/${email}`, {
+          method: 'DELETE',
+        });
+
+        navigate('/Authenticate');
+        
+      } catch (error) {
+        console.error('Failed to delete account', error);
+      }
+    }
+  };
+
   const handleHomeClick = () => {
     navigate('/');
   };
@@ -204,6 +221,7 @@ const Dashboard = () => {
         <div className="nav-left" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>FlashMaster</div>
         <div className="nav-right">
           <div className="logout-button" onClick={handleLogoutClick} style={{ cursor: 'pointer' }}>Log out</div>
+          <div className="delete-account" onClick={handleDeleteClick} style={{ cursor: 'pointer' }}>Delete account</div>
         </div>
       </nav>
       <div className="progress">

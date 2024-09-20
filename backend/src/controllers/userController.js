@@ -1,6 +1,32 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
+const DeckCard = require('../models/deckCardModel');
+
 const SALT_WORK_FACTOR = 10;
+
+// Delete a user
+exports.deleteUser = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Find the user by email
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Delete associated deck cards (assuming 'owner' refers to user ID)
+    await DeckCard.deleteMany({ owner: "Sohail" });
+
+    // Correctly delete the user
+    await User.findByIdAndDelete(user._id);
+
+    res.status(200).json({ message: 'User deleted successfully' });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting user', error });
+  }
+};
 
 // Find a User
 exports.findUser = async (req, res) => {
