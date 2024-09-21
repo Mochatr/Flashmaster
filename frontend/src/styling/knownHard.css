@@ -1,11 +1,11 @@
-.card-container {
+.card-container2 {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
 }
 
-.card {
+.card2 {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -13,24 +13,25 @@
     width: 250px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     position: relative;
+    text-align: center; /* Center the text */
 }
 
-.card h3 {
+.card2 h3 {
     font-size: 1.2rem;
     margin-bottom: 10px;
 }
 
-.card p {
+.card2 p {
     margin-bottom: 10px;
 }
 
-.card-actions {
+.card-actions2 {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
 }
 
-.card-actions button {
+.card-actions2 button {
     padding: 10px;
     border: none;
     border-radius: 4px;
@@ -40,20 +41,46 @@
     font-size: 0.9rem;
 }
 
-.card-actions button:hover {
+.card-actions2 button:hover {
     background-color: #0056b3;
 }
 
-.card-actions .delete {
+.card-actions2 .delete2 {
     background-color: #dc3545;
 }
 
-.card-actions .delete:hover {
+.card-actions2 .delete2:hover {
     background-color: #c82333;
 }
 
-.no-cards {
+.no-cards2 {
     text-align: center;
     font-size: 1.2rem;
     color: #777;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh; /* Full viewport height to center vertically */
+}
+.reviewButton {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    width: auto; /* Ensure the button does not take the full width */
+    display: inline-block; /* Ensure the button only takes the necessary width */
+    margin-left: auto;
+    margin-right: auto;
+    display: block; /* Center the button */
+}
+
+.knowHardCardsTitle {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: red;
 }

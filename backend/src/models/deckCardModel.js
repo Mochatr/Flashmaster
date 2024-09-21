@@ -47,15 +47,15 @@ const deckCardSchema = new Schema({
     }
   }],
   owner: {
-    type: String,
-    default: 'Sohail'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',  // Refers to the User model
+    required: true
   },
   createdAt: {
     type: Date,
     default: Date.now,
   }
 });
-
 
 const DeckCard = mongoose.model('DeckCard', deckCardSchema);
 module.exports = DeckCard;

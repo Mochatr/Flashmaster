@@ -2,9 +2,19 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 
-// Routes for Decks
-router.post('/user', userController.createUser);  // Create a new user
-router.post('/finduser', userController.findUser);  // Find a user by email and password
-router.delete('/deleteuser/:email', userController.deleteUser);  // Delete user
+// Create a new user
+router.post('/user', userController.createUser);  
+// Find a user by email and password
+router.post('/finduser', userController.findUser);  
+// Delete user
+router.delete('/deleteuser', userController.deleteUser);  
+// Log out user
+router.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) return res.status(500).send('Could not log out.');
+    res.status(200).send('Logged out successfully.');
+  });
+});
 
+  
 module.exports = router;

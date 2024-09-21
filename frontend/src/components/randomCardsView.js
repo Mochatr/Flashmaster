@@ -11,7 +11,10 @@ const RandomCardViewer = ({ deckId, onClose }) => {
 
     const fetchDeckCards = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/decks/${deckId}/cards`);
+            const response = await fetch(`http://localhost:5000/api/decks/${deckId}/cards`,{
+                method: 'GET',
+                credentials: 'include', // This ensures cookies are sent with the request
+              });
             const data = await response.json();
             const shuffledCards = data.sort(() => Math.random() - 0.5);
             setCards(shuffledCards);
@@ -46,7 +49,8 @@ const RandomCardViewer = ({ deckId, onClose }) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ known: true, hard: false })
+                body: JSON.stringify({ known: true, hard: false }),
+                credentials: 'include'
             });
             // just go to next card
             handleNext();
@@ -63,7 +67,8 @@ const RandomCardViewer = ({ deckId, onClose }) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ hard: true })
+                body: JSON.stringify({ hard: true }),
+                credentials: 'include'
             });
             // just go to next card
             handleNext();

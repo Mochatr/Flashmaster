@@ -7,20 +7,18 @@ const SALT_WORK_FACTOR = 10;
 // Delete a user
 exports.deleteUser = async (req, res) => {
   try {
-    const { email } = req.body;
-
-    // Find the user by email
-    const user = await User.findOne({ email: email });
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+    console.log(userId);
+    const user = await User.findByIdAndDelete(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    // Delete associated deck cards (assuming 'owner' refers to user ID)
-    await DeckCard.deleteMany({ owner: "Sohail" });
-
-    // Correctly delete the user
-    await User.findByIdAndDelete(user._id);
-
+    // Delete all deck cards associated with the user
+    await DeckCard.deleteMany({ owner: userId });
+    req.session.destroy(); // Destroy the session
     res.status(200).json({ message: 'User deleted successfully' });
 
   } catch (error) {
@@ -40,45 +38,34 @@ exports.findUser = async (req, res) => {
     }
 
     // Compare the password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.hashedPassword);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Respond success (You might want to return a JWT or some identifier here)
+    // Set user session
+    req.session.userId = user._id;  // Store user ID in session
     res.status(200).json({ message: "Login successful", user: { id: user._id, email: user.email } });
   } catch (error) {
-      res.status(500).json({ message: "Server error", error: error });
+    res.status(500).json({ message: "Server error", error: error });
   }
 };
 
-
-// Create a New User
 exports.createUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-
-    // Hash the password before saving the user
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const newUser = new User({ username, email, hashedPassword });
+    await newUser.save();
 
-    const user = new User({
-      username,
-      email,
-      password: hashedPassword, // Store the hashed password
-    });
+    // Set session on successful signup
+    req.session.userId = newUser._id;
+    console.log('Session created yes:', req.session);
 
-    const savedUser = await user.save();
-    // Optionally, exclude the password when returning the saved user
-    const userResponse = {
-      _id: savedUser._id,
-      username: savedUser.username,
-      email: savedUser.email
-    };
-
-    res.status(201).json(userResponse);
+    res.status(201).json(newUser);
   } catch (error) {
-    console.error('Error creating user:', error);
+    console.error('Error creating user:', error); // Log the error details
     res.status(500).json({ message: 'Error creating user', error });
   }
 };
@@ -86,9 +73,19 @@ exports.createUser = async (req, res) => {
 // Get all Users
 exports.getAllUsers = async (req, res) => {
   try {
-    // const users = await User.find();
-    res.status(200).json({ message: 'Get all users' });
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: 'Error getting users', error });
   }
+};
+
+// Handle logout
+exports.logoutUser = (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ message: 'Error logging out', error: err });
+    }
+    res.status(200).json({ message: 'Logged out successfully' });
+  });
 };

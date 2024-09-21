@@ -5,11 +5,12 @@ exports.createDeck = async (req, res) => {
   try {
     const { deckName, description } = req.body;
 
+    const userId = req.session.userId ; // Get the user ID from the session
     const newDeck = new DeckCard({
       deckName,
       description,
       cards: [],
-      owner: 'Sohail',  // Assuming user authentication
+      owner: userId,  // Set owner to the logged-in user's ID
     });
 
     const savedDeck = await newDeck.save();
@@ -21,10 +22,15 @@ exports.createDeck = async (req, res) => {
 
 // Get All Decks
 exports.getAllDecks = async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
+  
   try {
-    const decks = await DeckCard.find({ owner: 'Sohail' });  // Only get decks for the logged-in user
+    const decks = await DeckCard.find({ owner: req.session.userId });
     res.status(200).json(decks);
   } catch (error) {
+    console.error('Error retrieving decks:', error);
     res.status(500).json({ message: 'Error retrieving decks', error });
   }
 };
@@ -33,10 +39,14 @@ exports.getAllDecks = async (req, res) => {
 exports.getDeck = async (req, res) => {
   try {
     const { deckId } = req.params;
-    const deck = await DeckCard.findById(deckId);
+    console.log(
+      'deckId:', deckId,
+      'owner:', req.session.userId
+    )
+    const deck = await DeckCard.findOne({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
 
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     res.status(200).json(deck);
@@ -49,11 +59,10 @@ exports.getDeck = async (req, res) => {
 exports.deleteDeck = async (req, res) => {
   try {
     const { deckId } = req.params;
-
-    const deletedDeck = await DeckCard.findByIdAndDelete(deckId);
+    const deletedDeck = await DeckCard.findOneAndDelete({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
 
     if (!deletedDeck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     res.status(200).json({ message: 'Deck deleted successfully' });
@@ -61,15 +70,16 @@ exports.deleteDeck = async (req, res) => {
     res.status(500).json({ message: 'Error deleting deck', error });
   }
 };
-// updateDeck a Deck by ID
+
+// Update a Deck by ID
 exports.updateDeck = async (req, res) => {
   try {
     const { deckId } = req.params;
     const { deckName, description } = req.body;
 
-    const deck = await DeckCard.findById(deckId);
+    const deck = await DeckCard.findOne({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     deck.deckName = deckName || deck.deckName;
@@ -89,9 +99,9 @@ exports.addCardToDeck = async (req, res) => {
     const { deckId } = req.params;
     const { question, answer, difficulty, tags } = req.body;
 
-    const deck = await DeckCard.findById(deckId);
+    const deck = await DeckCard.findOne({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     const newCard = {
@@ -117,10 +127,10 @@ exports.addCardToDeck = async (req, res) => {
 exports.getDeckCards = async (req, res) => {
   try {
     const { deckId } = req.params;
-    const deck = await DeckCard.findById(deckId);
+    const deck = await DeckCard.findOne({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
 
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     res.status(200).json(deck.cards);  // Return all cards in the deck
@@ -129,15 +139,14 @@ exports.getDeckCards = async (req, res) => {
   }
 };
 
-
-// Get a Single card by ID from a deck by ID
+// Get a Single Card by ID from a Deck by ID
 exports.getCard = async (req, res) => {
   try {
     const { deckId, cardId } = req.params;
 
-    const deck = await DeckCard.findById(deckId);
+    const deck = await DeckCard.findOne({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     const card = deck.cards.find((card) => card._id.toString() === cardId);
@@ -150,15 +159,16 @@ exports.getCard = async (req, res) => {
     res.status(500).json({ message: 'Error retrieving card', error });
   }
 };
+
 // Update a Card in a Deck
 exports.updateCardInDeck = async (req, res) => {
   try {
     const { deckId, cardId } = req.params;
     const { question, answer, difficulty, tags, known, hard } = req.body;
 
-    const deck = await DeckCard.findById(deckId);
+    const deck = await DeckCard.findOne({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     const cardIndex = deck.cards.findIndex((card) => card._id.toString() === cardId);
@@ -184,15 +194,14 @@ exports.updateCardInDeck = async (req, res) => {
   }
 };
 
-
 // Delete a Card from a Deck
 exports.deleteCardFromDeck = async (req, res) => {
   try {
     const { deckId, cardId } = req.params;
 
-    const deck = await DeckCard.findById(deckId);
+    const deck = await DeckCard.findOne({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     const cardIndex = deck.cards.findIndex((card) => card._id.toString() === cardId);
@@ -210,16 +219,14 @@ exports.deleteCardFromDeck = async (req, res) => {
   }
 };
 
-
 // Get all known cards for a specific deck
 exports.getKnownCards = async (req, res) => {
   try {
     const { deckId } = req.params;
-    console.log(deckId);
 
-    const deck = await DeckCard.findById(deckId);
+    const deck = await DeckCard.findOne({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     const knownCards = deck.cards.filter((card) => card.known);
@@ -234,9 +241,9 @@ exports.getHardCards = async (req, res) => {
   try {
     const { deckId } = req.params;
 
-    const deck = await DeckCard.findById(deckId);
+    const deck = await DeckCard.findOne({ _id: deckId, owner: req.session.userId  }); // Ensure the deck belongs to the user
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return res.status(404).json({ message: 'Deck not found or not owned by you' });
     }
 
     const hardCards = deck.cards.filter((card) => card.hard);

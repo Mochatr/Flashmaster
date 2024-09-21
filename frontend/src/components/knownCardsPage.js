@@ -10,7 +10,10 @@ function KnownCardsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/decks/${deckId}/known-cards`)
+        fetch(`http://localhost:5000/api/decks/${deckId}/known-cards`,{
+          method: 'GET',
+          credentials: 'include', // This ensures cookies are sent with the request
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -41,6 +44,7 @@ function KnownCardsPage() {
             tags: updatedTags ? updatedTags.split(',').map(tag => tag.trim()) : [],
             difficulty: updatedDifficulty,
           }),
+          credentials: 'include'
         });
         // refresh
         window.location.reload();
@@ -55,6 +59,7 @@ function KnownCardsPage() {
             try {
               await fetch(`http://localhost:5000/api/decks/${deckId}/cards/${cardId}`, {
                 method: 'DELETE',
+                credentials: 'include'
               });
               window.location.reload();
             } catch (error) {
@@ -72,24 +77,24 @@ function KnownCardsPage() {
 
     return (
         <div>
-            <h2>Known Cards</h2>
+            <h2 className='knowHardCardsTitle' >Known Cards</h2>
             {knownCards.length === 0 ? (
-                <p className="no-cards">No cards to show</p>
+                <p className="no-cards2">No cards to show</p>
             ) : (
-                <div className="card-container">
+                <div className="card-container2">
                     {knownCards.map(card => (
-                        <div key={card._id} className="card">
+                        <div key={card._id} className="card2">
                             <h3>{card.question}</h3>
                             <p>{card.answer}</p>
-                            <div className="card-actions">
+                            <div className="card-actions2">
                                 <button onClick={() => handleModify(deckId, card._id)}>Modify</button>
-                                <button className="delete" onClick={() => handleDelete(deckId, card._id)}>Delete</button>
+                                <button className="delete2" onClick={() => handleDelete(deckId, card._id)}>Delete</button>
                             </div>
                         </div>
                     ))}
                 </div>
             )}
-            {knownCards.length > 0 && <button onClick={openModal}>Review Selected Cards</button>}
+            {knownCards.length > 0 && <button className='reviewButton' onClick={openModal}>Review Selected Cards</button>}
             <ReviewModal isOpen={isModalOpen} onClose={closeModal} cards={knownCards} />
         </div>
     );

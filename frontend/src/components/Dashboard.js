@@ -25,7 +25,16 @@ const Dashboard = () => {
 
   const fetchDecks = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/decks');
+      const response = await fetch('http://localhost:5000/api/decks', {
+        method: 'GET',
+        credentials: 'include', // This ensures cookies are sent with the request
+      });
+      
+      if (response.status === 401) {
+        navigate('/Authenticate'); // Redirect to login if unauthorized
+        return;
+      }
+  
       const data = await response.json();
       setDecks(data);
       calculateProgress(data);
@@ -57,8 +66,8 @@ const Dashboard = () => {
         body: JSON.stringify({
           deckName: deckTitle,
           description: deckDescription,
-          owner: 'Sohail',
         }),
+        credentials: 'include'
       });
       const newDeck = await response.json();
       setDecks([...decks, newDeck]);
@@ -83,8 +92,8 @@ const Dashboard = () => {
           answer: cardAnswer,
           tags: cardTags ? cardTags.split(',').map(tag => tag.trim()) : [],
           difficulty: cardDifficulty,
-          owner: 'Sohail',
         }),
+        credentials: 'include'
       });
       await handleDeckSelection(selectedDeckId);
       setCardQuestion('');
@@ -98,7 +107,10 @@ const Dashboard = () => {
 
   const handleDeckSelection = async (deckId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/decks/${deckId}`);
+      const response = await fetch(`http://localhost:5000/api/decks/${deckId}`,{
+        method: 'GET',
+        credentials: 'include', // This ensures cookies are sent with the request
+      });
       const data = await response.json();
       setSelectedDeck(data);
       setSelectedDeckId(deckId);
@@ -108,22 +120,26 @@ const Dashboard = () => {
   };
 
   const handleLogoutClick = () => {
-    navigate('/Authenticate');
+    fetch('http://localhost:5000/api/logout', {
+      method: 'POST',
+      credentials: 'include', // This ensures cookies are sent with the request
+    }).then(() => {
+      navigate('/Authenticate');
+    }).catch(error => {
+      console.error('Error logging out:', error);
+    });
   };
 
   const handleDeleteClick = async () => {
-    const email = "milan12@gmail.com";
-
     if (window.confirm('Are you sure you want to delete your account?')) {
       try {
-        await fetch(`http://localhost:5000/api/deleteuser/${email}`, {
+        await fetch('http://localhost:5000/api/deleteuser', {
           method: 'DELETE',
+          credentials: 'include', // This ensures cookies are sent with the request
         });
-
         navigate('/Authenticate');
-        
       } catch (error) {
-        console.error('Failed to delete account', error);
+        console.error('Error deleting account:', error);
       }
     }
   };
@@ -153,6 +169,7 @@ const Dashboard = () => {
             tags: updatedTags ? updatedTags.split(',').map(tag => tag.trim()) : [],
             difficulty: updatedDifficulty,
           }),
+          credentials: 'include'
         });
         await handleDeckSelection(deckId); // Refresh deck data after modification
       } catch (error) {
@@ -166,6 +183,7 @@ const Dashboard = () => {
       try {
         await fetch(`http://localhost:5000/api/decks/${deckId}/cards/${cardId}`, {
           method: 'DELETE',
+          credentials: 'include'
         });
         await handleDeckSelection(deckId); // Refresh deck data after deletion
       } catch (error) {
@@ -187,6 +205,7 @@ const Dashboard = () => {
             deckName: updatedTitle,
             description: updatedDescription,
           }),
+          credentials: 'include'
         });
         await fetchDecks(); // Refresh all decks data
         if (selectedDeckId === deckId) {
@@ -203,6 +222,7 @@ const Dashboard = () => {
       try {
         await fetch(`http://localhost:5000/api/decks/${deckId}`, {
           method: 'DELETE',
+          credentials: 'include'
         });
         await fetchDecks(); // Refresh all decks data
         if (selectedDeckId === deckId) {
@@ -311,7 +331,6 @@ const Dashboard = () => {
               {deck.deckName}
               <button onClick={() => handleDeckModification(deck._id)}>Modify</button>
               <button onClick={() => handleDeckDeletion(deck._id)}>Delete Deck</button>
-              // Inside the deck rendering logic
             <div key={deck._id}>
                 <h3>{deck.name}</h3>
                 {/* Link to Known Cards */}
@@ -334,7 +353,8 @@ const Dashboard = () => {
         onDelete={(deckId, cardId) => handleCardDeletion(deckId, cardId)} 
       />
     ) : (
-      <p>No cards in this deck.</p>
+      // a big title
+      <h2>No cards in this deck yet. Add some above!</h2>
     )}
   </div>
 )}
