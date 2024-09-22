@@ -1,0 +1,50 @@
+/* RandomCardsPopup.css */
+.random-cards-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Dimmed background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure it’s above other content */
+    padding: 20px;
+}
+
+.random-cards-popup h2 {
+    color: white; /* Adjust color as needed */
+}
+
+.random-cards-popup ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0;
+}
+
+.random-cards-popup li {
+    cursor: pointer;
+    color: white; /* Adjust color as needed */
+    padding: 10px;
+    margin: 5px 0;
+    transition: background-color 0.3s;
+}
+
+.random-cards-popup li:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* Hover effect */
+}
+
+.random-cards-popup button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #32cd32; /* Button color */
+    color: white; /* Button text color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.random-cards-popup button:hover {
+    background-color: #28a745; /* Darker button color on hover */
+}

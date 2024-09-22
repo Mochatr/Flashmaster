@@ -1,6 +1,7 @@
 import React from 'react';
 import RandomCardViewer from './randomCardsView';
 import { useState } from 'react';
+import '../styling/randomcardspopup.css'
 
 const RandomCardsPopup = ({ decks, setShowRandomPopup }) => {
     const [selectedDeckId, setSelectedDeckId] = useState(null);

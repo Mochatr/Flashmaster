@@ -81,7 +81,7 @@ const RandomCardViewer = ({ deckId, onClose }) => {
         <div className="random-card-viewer">
             {cards.length > 0 && (
                 <div className="card-grid">
-                    <div className="card-preview">
+                    <div className="card-preview" style={{color: "white"}}>
                         {showAnswer ? (
                             <p>{cards[currentCardIndex].answer}</p>
                         ) : (
