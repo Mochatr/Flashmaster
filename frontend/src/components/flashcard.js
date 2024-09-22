@@ -31,7 +31,7 @@ const Flashcard = ({ selectedDeck, onModify, onDelete }) => {
                   <div className="card-front">
                     <h4>{card.question}</h4>
                     <p>Tags: {card.tags.join(', ')}</p>
-                    <p>Difficulty: {card.difficulty}</p>
+                    <p>Difficulty Level: {card.difficulty}</p>
                   </div>
                   <div className="card-back">
                     <p>{card.answer}</p>

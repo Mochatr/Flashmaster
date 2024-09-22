@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import RandomCardsPopup from './randomCardsPopup';
 import Flashcard from './flashcard';
 import '../styling/Dashboard.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Dashboard = () => {
   const [decks, setDecks] = useState([]);
@@ -16,10 +18,12 @@ const Dashboard = () => {
   const [selectedDeck, setSelectedDeck] = useState(null);
   const [showRandomPopup, setShowRandomPopup] = useState(false);
   const [progress, setProgress] = useState({ reviewed: 0, known: 0, hard: 0 });
+  const [username, setUsername] = useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    fetchUserData();
     fetchDecks();
   }, []);
 
@@ -42,6 +46,9 @@ const Dashboard = () => {
       console.error('Error fetching decks:', error);
     }
   };
+
+ 
+
   const calculateProgress = (decks) => {
     let reviewed = 0;
     let known = 0;
@@ -54,6 +61,7 @@ const Dashboard = () => {
         if (card.hard) hard++;
       });
     });
+
 
     setProgress({ reviewed, known, hard });
   };
@@ -73,7 +81,9 @@ const Dashboard = () => {
       setDecks([...decks, newDeck]);
       setDeckTitle('');
       setDeckDescription('');
+      toast.success('Deck created successfully!');
     } catch (error) {
+      toast.error('Error creating deck');
       console.error('Error creating deck:', error);
     }
   };
@@ -100,7 +110,9 @@ const Dashboard = () => {
       setCardAnswer('');
       setCardTags('');
       setCardDifficulty('');
+      toast.success('Card added successfully');
     } catch (error) {
+      toast.error('Error adding card to deck');
       console.error('Error adding card to deck:', error);
     }
   };
@@ -172,7 +184,9 @@ const Dashboard = () => {
           credentials: 'include'
         });
         await handleDeckSelection(deckId); // Refresh deck data after modification
+        toast.success('Card updated successfully');
       } catch (error) {
+        toast.error('Error updating card');
         console.error('Error updating card:', error);
       }
     }
@@ -186,7 +200,9 @@ const Dashboard = () => {
           credentials: 'include'
         });
         await handleDeckSelection(deckId); // Refresh deck data after deletion
+        toast.error('Card deleted successfully');
       } catch (error) {
+        toast.error('Error deleting card');
         console.error('Error deleting card:', error);
       }
     }
@@ -211,7 +227,9 @@ const Dashboard = () => {
         if (selectedDeckId === deckId) {
           await handleDeckSelection(deckId); // Refresh selected deck data
         }
+        toast.success('Deck updated successfully');
       } catch (error) {
+        toast.error('Error updating Deck');
         console.error('Error updating deck:', error);
       }
     }
@@ -229,10 +247,21 @@ const Dashboard = () => {
           setSelectedDeck(null);
           setSelectedDeckId('');
         }
+        toast.success('Deck deleted successfully');
       } catch (error) {
+        toast.error('Error deleting this Deck');
         console.error('Error deleting deck:', error);
       }
     }
+  };
+
+  const fetchUserData = async () => {
+    const response = await fetch('http://localhost:5000/api/user', {
+      method: 'GET',
+      credentials: 'include',
+    });
+    const data = await response.json();
+    setUsername(data.username); 
   };
 
   return (
@@ -244,12 +273,17 @@ const Dashboard = () => {
           <div className="delete-account" onClick={handleDeleteClick} style={{ cursor: 'pointer' }}>Delete account</div>
         </div>
       </nav>
+      <div className="welcome-message">
+      Welcome to FlashMaster Pro, {username}
+    </div>
       <div className="progress">
         <h3>Progress</h3>
         <p>Reviewed: {progress.reviewed}</p>
         <p>Known: {progress.known}</p>
         <p>Hard: {progress.hard}</p>
       </div>
+     
+
 
       <div className="main-content">
         <div className="content">
@@ -366,7 +400,7 @@ const Dashboard = () => {
 {showRandomPopup && (
             <RandomCardsPopup decks={decks} setShowRandomPopup={setShowRandomPopup} />
         )}
-        
+        <ToastContainer />
     </div>
   );
 };

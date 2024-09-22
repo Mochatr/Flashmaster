@@ -45,7 +45,7 @@ exports.findUser = async (req, res) => {
 
     // Set user session
     req.session.userId = user._id;  // Store user ID in session
-    res.status(200).json({ message: "Login successful", user: { id: user._id, email: user.email } });
+    res.status(200).json({ user: { id: user._id, email: user.email } });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error });
   }
@@ -54,6 +54,12 @@ exports.findUser = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
+    // Check if the email is already in use
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use' });
+    }
+
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
     const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = new User({ username, email, hashedPassword });
@@ -61,7 +67,7 @@ exports.createUser = async (req, res) => {
 
     // Set session on successful signup
     req.session.userId = newUser._id;
-    console.log('Session created yes:', req.session);
+    console.log('Session created :', req.session);
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -88,4 +94,22 @@ exports.logoutUser = (req, res) => {
     }
     res.status(200).json({ message: 'Logged out successfully' });
   });
+};
+
+
+// Get the current user
+exports.getCurrentUser = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting current user', error });
+  }
 };

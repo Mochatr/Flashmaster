@@ -8,6 +8,8 @@ router.post('/user', userController.createUser);
 router.post('/finduser', userController.findUser);  
 // Delete user
 router.delete('/deleteuser', userController.deleteUser);  
+// Get current user
+router.get('/user', userController.getCurrentUser);
 // Log out user
 router.post('/logout', (req, res) => {
   req.session.destroy(err => {
