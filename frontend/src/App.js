@@ -5,6 +5,8 @@ import LoginSignup from './components/LoginSignup/LoginSignup';
 import Dashboard from './components/Dashboard';
 import KnownCardsPage from './components/knownCardsPage';
 import HardCardsPage from './components/hardCardsPage';
+import Aipro from './components/aipro';
+
 const App = () => {
   return (
     <Router>
@@ -14,6 +16,7 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/decks/:deckId/known-cards" element={<KnownCardsPage/>} />
 <Route path="/decks/:deckId/hard-cards" element={<HardCardsPage/>} />
+<Route path="/generate" element={<Aipro/>} />
       </Routes>
     </Router>
   );
