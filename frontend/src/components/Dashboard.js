@@ -264,6 +264,9 @@ const Dashboard = () => {
     setUsername(data.username); 
   };
 
+  const handleAiProclick = () => {
+    navigate('/generate');
+  }
   return (
     <div className="dashboard">
       <nav className="dashboard-navbar">
@@ -355,7 +358,7 @@ const Dashboard = () => {
         </div>
 
         <div className="sidebar">
-          <button className="ai-pro-button">← AI Pro</button>
+          <button className="ai-pro-button" onClick={handleAiProclick} >← AI Pro</button>
           {decks.map(deck => (
             <button
               key={deck._id}

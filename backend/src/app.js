@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const deckRoutes = require('./routes/deckCardRoutes');
 const userRoutes = require('./routes/userRoutes');
+const aiProRoutes = require('./routes/aiProRoutes');
 const { unstable_renderSubtreeIntoContainer } = require('react-dom');
 
 const app = express();
@@ -57,6 +58,11 @@ app.use('/api', userRoutes); // No authentication needed
 
 // Deck Routes (authentication required)
 app.use('/api', requireLogin, deckRoutes);
+
+// api pro routes
+app.use('/api', requireLogin, aiProRoutes);
+
+
 app.get('/api/check-session', (req, res) => {
   if (req.session.userId) {
     return res.status(200).json({ message: 'Session is active', userId: req.session.userId });

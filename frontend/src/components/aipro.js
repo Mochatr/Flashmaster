@@ -1,81 +1,112 @@
-import { React, useState } from 'react'
+import { useState, useEffect } from 'react';
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Grid,
+  Card,
+  CardContent,
+} from '@mui/material';
 
 export default function Generate() {
-  const [text, setText] = useState('')
-  const [flashcards, setFlashcards] = useState([])
-  const [setName, setSetName] = useState('')
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const { isLoaded, userId, sessionId, getToken } = useAuth()
+  const [text, setText] = useState('');
+  const [flashcards, setFlashcards] = useState([]);
+/*   const [setName, setSetName] = useState(''); */
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [decks, setDecks] = useState([]);
+
+  const fetchUserData = async () => {
+    const response = await fetch('http://localhost:5000/api/user', {
+      method: 'GET',
+      credentials: 'include',
+    });
+    const data = await response.json();
+    setUserId(data._id); 
+  };
+
+  const fetchDecks = async () => {
+    const response = await fetch(`http://localhost:5000/api/aidecks/${userId}`,
+      { method: 'GET', credentials: 'include' }
+    );
+    const data = await response.json();
+    setDecks(data);
+  };
+
+  useEffect(() => {
+    fetchUserData();
+    if (userId) fetchDecks();
+  }, [userId]);
 
   const handleFlip = (index) => {
-    const allFlashcards = [...flashcards]
-    allFlashcards[index].flip = !allFlashcards[index].flip
-    setFlashcards(allFlashcards)
-  }
+    const allFlashcards = [...flashcards];
+    allFlashcards[index].flip = !allFlashcards[index].flip;
+    setFlashcards(allFlashcards);
+  };
 
   const handleSubmit = async () => {
     if (!text.trim()) {
-      alert('Please enter some text to generate flashcards.')
-      return
+      alert('Please enter some text to generate flashcards.');
+      return;
     }
-  
+
     try {
-      const response = await fetch('/api/generate', {
+      const response = await fetch('http://localhost:5000/api/generate', {
         method: 'POST',
-        body: text,
-      })
-  
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ text, userId }),
+      });
+
       if (!response.ok) {
-        throw new Error('Failed to generate flashcards')
+        throw new Error('Failed to generate flashcards');
       }
-  
-      const data = await response.json()
-      setFlashcards(data)
-      setText('')
+
+      const data = await response.json();
+      setFlashcards(data);
+      setText('');
     } catch (error) {
-      console.error('Error generating flashcards:', error)
-      alert('An error occurred while generating flashcards. Please try again.')
+      console.error('Error generating flashcards:', error);
+      alert('An error occurred while generating flashcards. Please try again.');
     }
-  }
+  };
 
-
-  const saveFlashcards = async () => {
-    if (!setName.trim()) {
-      alert('Please enter a name for your flashcard set.')
-      return
-    }
-  
+/*   const handleSaveDeck = async () => {
+    console.log(
+      'Saving deck:', { setName, flashcards, userId }
+    )
     try {
-      console.log(db)
-      const userDocRef = doc(collection(db, 'users'), userId)
-      const userDocSnap = await getDoc(userDocRef)
-  
-      const batch = writeBatch(db)
-  
-      if (userDocSnap.exists()) {
-        const userData = userDocSnap.data()
-        const updatedSets = [...(userData.flashcardSets || []), { name: setName }]
-        batch.update(userDocRef, { flashcardSets: updatedSets })
-      } else {
-        batch.set(userDocRef, { flashcardSets: [{ name: setName }] })
-      }
-  
-      const setDocRef = doc(collection(userDocRef, 'flashcardSets'), setName)
-      batch.set(setDocRef, { flashcards })
-  
-      await batch.commit()
-  
-      alert('Flashcards saved successfully!')
-      handleCloseDialog()
-      setSetName('')
-    } catch (error) {
-      console.error('Error saving flashcards:', error)
-      alert('An error occurred while saving flashcards. Please try again.')
-    }
-  }
+      const response = await fetch('http://localhost:5000/api/saveDeck', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ setName, cards: flashcards, userId }),
+      });
 
-  const handleOpenDialog = () => setDialogOpen(true)
-  const handleCloseDialog = () => setDialogOpen(false)
+      if (!response.ok) {
+        throw new Error('Failed to save deck');
+      }
+
+      setDialogOpen(false);
+      fetchDecks(); // Reload decks after saving
+    } catch (error) {
+      console.error('Error saving deck:', error);
+    }
+  }; */
+
+  const handleOpenDialog = () => setDialogOpen(true);
+  const handleCloseDialog = () => setDialogOpen(false);
 
   return (
     <Container maxWidth="md">
@@ -93,16 +124,11 @@ export default function Generate() {
           variant="outlined"
           sx={{ mb: 2 }}
         />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-          fullWidth
-        >
+        <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
           Generate Flashcards
         </Button>
       </Box>
-      
+
       {flashcards.length > 0 && (
         <Box sx={{ mt: 4 }}>
           <Typography variant="h5" component="h2" gutterBottom>
@@ -121,48 +147,59 @@ export default function Generate() {
                 ) : (
                   <Card onClick={() => handleFlip(index)} sx={{ cursor: 'pointer' }}>
                     <CardContent>
-                      <Typography variant="h6" sx={{ mt: 2 }}>Question:</Typography>
+                      <Typography variant="h6">Question:</Typography>
                       <Typography>{flashcard.front}</Typography>
                     </CardContent>
                   </Card>
                 )}
               </Grid>
-            ))
-          }    
+            ))}
           </Grid>
-          {/* Save Flashcards button added here */}
-          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-            <Button variant="contained" color="primary" onClick={handleOpenDialog}>
-              Save Flashcards
-            </Button>
-          </Box>
+      {/*     <Button variant="contained" color="secondary" onClick={handleOpenDialog} sx={{ mt: 4 }}>
+            Save Deck
+          </Button> */}
         </Box>
       )}
 
-      {/* Dialog component added here */}
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Save Flashcard Set</DialogTitle>
+{/*       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Save Deck</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter a name for your flashcard set.
+            Enter a name for your flashcard set.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            label="Set Name"
-            type="text"
+            label="Deck Name"
             fullWidth
+            variant="outlined"
             value={setName}
             onChange={(e) => setSetName(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={saveFlashcards} color="primary">
-            Save
-          </Button>
+          <Button onClick={handleCloseDialog} color="primary">Cancel</Button>
+          <Button onClick={handleSaveDeck} color="secondary">Save</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
+
+{/*       {decks.length > 0 && (
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h5" gutterBottom>Your Decks</Typography>
+          <Grid container spacing={2}>
+            {decks.map((deck) => (
+              <Grid item xs={12} sm={6} md={4} key={deck._id}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6">{deck.deckName}</Typography>
+                    <Typography>{deck.cards.length} flashcards</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      )} */}
     </Container>
-  )
+  );
 }
