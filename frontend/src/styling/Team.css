@@ -1,0 +1,239 @@
+/* .section-white {
+  background-color: #fff;
+  padding: 70px 0;
+}
+
+.team-item {
+  background: #f4f5f6;
+  text-align: center;
+  margin: 20px 0;
+  padding: 50px 20px 40px 20px;
+  border-radius: 8px 8px;
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  -ms-transition: all 0.25s ease-in-out;
+  -o-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+
+.team-item:hover {
+  background: #3956de;
+  color: white;
+}
+
+.team-item h3 {
+  margin: 20px 0 1px 0 !important;
+  color: #454545;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+
+.section-subtitle {
+  white-space: pre-line;
+}
+
+.team-item:hover h3 {
+  color: #ddd;
+}
+
+.team-info {
+  display: block;
+  margin-bottom: 0;
+}
+
+.team-info p {
+  color: #acacac;
+  font-style: italic;
+}
+
+.team-info::after {
+    background: #008aff;
+    background: -webkit-linear-gradient(
+        135deg, #6802ff 0%, #985BEF 100%
+    );
+    background: -o-linear-gradient(
+        135deg, #6802ff 0%, #985BEF 100%
+    );
+    background: -moz-linear-gradient(
+        135deg, #6802ff 0%, #985BEF 100%
+    );
+    background: linear-gradient(
+        135deg, #6802ff 0%, #985BEF 100%
+    );
+
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+    width: 50px;
+    height: 3px;
+    margin-top: -20px;
+}
+
+.team-img {
+    max-width: 140px;
+    padding: 6px 6px;
+    background-color: #dedede;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+ul.team-icon {
+  margin-top: 25px;
+}
+
+ul.team-icon li {
+  display: inline-block;
+  margin: 0 3px;
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  -ms-transition: all 0.25s ease-in-out;
+  -o-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+
+ul.team-icon li a {
+    margin: 0;
+    display: inline-block;
+    padding: 8px 8px;
+    width: 34px;
+    height: 34px;
+    font-size: 18px;
+    line-height: 18px;
+    background-color: #fff;
+    border-radius: 50%;
+    color: #fff;
+}
+
+ul.team-icon li a:twitter {
+  background: #121415;
+}
+
+ul.team-icon li a:linkedin {
+  background: hwb(209 10% 5% / 0.293);
+}
+
+ul.team-icon li a:facebook {
+  background: #2d22f3;
+}
+
+.team-icon li a:hover {
+  color: #dedede;
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  -ms-transition: all 0.25s ease-in-out;
+  -o-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out; 
+} */
+
+.team-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 2rem 0;
+}
+
+.team-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.team-heading {
+  text-align: center;
+  color: rgba(4, 106, 173, 0.671);
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.team-members {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.team-member {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.team-member-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.team-member-name {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.team-member-role {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.team-member-description {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 1.5rem;
+}
+
+.team-member-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.team-member-link {
+  text-decoration: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: opacity 0.3s ease;
+}
+
+.team-member-link:hover {
+  opacity: 0.8;
+}
+
+.team-member-link.github {
+  background-color: #333;
+}
+
+.team-member-link.linkedin {
+  background-color: #0077b5;
+}
+
+.team-member-link.twitter {
+  background-color: #1da1f2;
+}
+
+@media (max-width: 768px) {
+  .team-members {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .team-member {
+    max-width: 100%;
+  }
+}

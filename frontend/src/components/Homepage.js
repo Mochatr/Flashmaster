@@ -13,6 +13,10 @@ const Homepage = () => {
     navigate('/Authenticate'); // Redirect to the login/signup page
   };
 
+  const handleTeamClick = () => {
+    navigate('/team'); // Redirect to the Team page
+  };
+
   const handleHomeClick = () => {
     if (isLoggedIn) {
       navigate('/dashboard'); // Redirect to dashboard if logged in
@@ -28,7 +32,7 @@ const Homepage = () => {
         <ul className="nav-center">
           <li>About</li>
           <li>Features</li>
-          <li>Meet the Team</li>
+          <li onClick={handleTeamClick}>Meet the Team </li>
         </ul>
         <div className="nav-right" onClick={handleLoginSignUpClick} style={{ cursor: 'pointer' }}>Login</div>
       </nav>
