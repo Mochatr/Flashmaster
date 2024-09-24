@@ -17,6 +17,10 @@ const Homepage = () => {
     navigate('/team'); // Redirect to the Team page
   };
 
+  const handleAboutClick = () => {
+    navigate('/about'); // Redirect to the about page
+  };
+
   const handleHomeClick = () => {
     if (isLoggedIn) {
       navigate('/dashboard'); // Redirect to dashboard if logged in
@@ -30,7 +34,7 @@ const Homepage = () => {
       <nav className="navbar">
         <div className="nav-left" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>FlashMaster</div>
         <ul className="nav-center">
-          <li>About</li>
+        <li onClick={handleAboutClick}>About</li>
           <li>Features</li>
           <li onClick={handleTeamClick}>Meet the Team </li>
         </ul>
