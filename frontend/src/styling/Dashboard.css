@@ -1,7 +1,10 @@
 /* General Styling */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
 body {
   background-color: #ffffff; /* Peach background */
-  font-family: 'Roboto', sans-serif; /* Modern font */
+  font-family: 'Poppins', sans-serif; /* Modern font */
+
 }
 
 .dashboard {
@@ -129,10 +132,11 @@ body {
 
   .progress {
     margin: 10px auto; /* Center horizontally */
+    text-align: center;
     background-color: #f3f3f3; /* Light grey background */
     border-radius: 10px;
     box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 10%; /* Adjust width as needed */
+    width: 50%; /* Adjust width as needed */
   }
 
   .progress-bar {
