@@ -7,7 +7,7 @@ import KnownCardsPage from './components/knownCardsPage';
 import About from './components/About';
 import HardCardsPage from './components/hardCardsPage';
 import Aipro from './components/aipro';
-import Team from './components/Team';
+import Team from './components/team';
 
 const App = () => {
   return (

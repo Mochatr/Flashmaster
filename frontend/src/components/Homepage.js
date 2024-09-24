@@ -35,7 +35,6 @@ const Homepage = () => {
         <div className="nav-left" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>FlashMaster</div>
         <ul className="nav-center">
         <li onClick={handleAboutClick}>About</li>
-          <li>Features</li>
           <li onClick={handleTeamClick}>Meet the Team </li>
         </ul>
         <div className="nav-right" onClick={handleLoginSignUpClick} style={{ cursor: 'pointer' }}>Login</div>
@@ -43,14 +42,14 @@ const Homepage = () => {
 
       <header className="header">
         <h1>Welcome to <span>FlashMaster Pro</span></h1>
-        <p>Your personal flashcard learning app!</p>
+        <p className='modo' >Your personal flashcard learning app!</p>
 
         <div className="action-section">
           <button className="get-started-button" onClick={handleLoginSignUpClick}>Get Started</button>
         </div>
       </header>
 
-      <footer className="footer">
+      <footer className="footer1">
         <p>&copy; 2024 FlashMaster. All rights reserved.</p>
       </footer>
     </div>

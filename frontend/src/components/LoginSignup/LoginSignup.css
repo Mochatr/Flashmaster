@@ -16,13 +16,13 @@
   .text {
     font-size: 28px; /* Increased font size */
     font-weight: bold;
-    color: #32cd32; /* Preferred color */
+    color: black; /* Preferred color */
   }
   
   .underline {
     width: 70%; /* Wider underline */
     height: 4px; /* Thicker underline */
-    background-color: #32cd32;
+    background-color: #0077b5;
     margin: 0 auto;
   }
   
@@ -42,8 +42,8 @@
   }
   
   .input:hover {
-    border-color: #32cd32; /* Change border color on hover */
-    box-shadow: 0 0 5px rgba(50, 205, 50, 0.5); /* Subtle shadow on hover */
+    border-color: #0077b5; /* Change border color on hover */
+    box-shadow: 0 0 5px #0077b5; /* Subtle shadow on hover */
   }
   
   .input img {
@@ -64,7 +64,7 @@
   }
   
   .submit {
-    background-color: #32cd32; /* Button color */
+    background-color: #0077b5; /* Button color */
     color: white;
     border: none;
     border-radius: 8px; /* More rounded corners */
@@ -75,20 +75,20 @@
   }
   
   .submit:hover {
-    background-color: #28a745; /* Darker shade on hover */
+    background-color: #0077b5; /* Darker shade on hover */
     transform: translateY(-2px); /* Slight lift on hover */
   }
   
   .switch {
     margin-top: 20px; /* Increased top margin */
-    color: #32cd32;
+    color: #0077b5;
     cursor: pointer;
     text-decoration: underline;
     transition: color 0.3s; /* Smooth transition */
   }
   
   .switch:hover {
-    color: #28a745; /* Darker shade on hover */
+    color: #0077b5; /* Darker shade on hover */
   }
   
   .error-message {

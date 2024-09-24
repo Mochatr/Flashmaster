@@ -24,7 +24,6 @@ const About = () => {
               <li>Track your progress with detailed performance analytics</li>
               <li>Engage in collaborative learning with peers and study groups</li>
               <li>Access your flashcards anytime, anywhere with our mobile-friendly design</li>
-              <li>Integrate multimedia elements like images and audio for enhanced learning</li>
             </ul>
           </section>
 
@@ -34,7 +33,6 @@ const About = () => {
               <li>Students preparing for exams or mastering course material</li>
               <li>Language learners expanding their vocabulary and grammar skills</li>
               <li>Professionals staying up-to-date with industry knowledge</li>
-              <li>Lifelong learners exploring new subjects and interests</li>
             </ul>
           </section>
 

@@ -277,17 +277,14 @@ const Dashboard = () => {
         </div>
       </nav>
       <div className="welcome-message">
-      Welcome to FlashMaster Pro, {username}
-    </div>
+        Welcome to FlashMaster Pro, {username}
+      </div>
       <div className="progress">
         <h3>Progress</h3>
         <p>Reviewed: {progress.reviewed}</p>
         <p>Known: {progress.known}</p>
         <p>Hard: {progress.hard}</p>
       </div>
-     
-
-
       <div className="main-content">
         <div className="content">
           <div className="flashcard-creation centered-form">
@@ -365,11 +362,13 @@ const Dashboard = () => {
               className="deck-button"
               onClick={() => handleDeckSelection(deck._id)}
             >
-              {deck.deckName}
-              <button onClick={() => handleDeckModification(deck._id)}>Modify</button>
-              <button onClick={() => handleDeckDeletion(deck._id)}>Delete Deck</button>
-            <div key={deck._id}>
-                <h3>{deck.name}</h3>
+                <h3 style={{
+                    color: selectedDeckId === deck._id ? 'blue' : 'black',
+                }}>{deck.deckName}</h3>
+              
+              <button className='b1' onClick={() => handleDeckModification(deck._id)}>Modify</button>
+              <button className='b1' onClick={() => handleDeckDeletion(deck._id)}>Delete Deck</button>
+            <div key={deck._id} className='deckHandler'>
                 {/* Link to Known Cards */}
                 <Link to={`/decks/${deck._id}/known-cards`}>Known Cards</Link>
                 {/* Link to Hard Cards */}

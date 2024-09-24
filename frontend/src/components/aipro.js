@@ -1,33 +1,33 @@
 import { useState, useEffect } from 'react';
+import { useNavigate} from 'react-router-dom';
 import {
   Container,
   TextField,
   Button,
   Typography,
   Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Grid,
   Card,
   CardContent,
+  CardActions,
 } from '@mui/material';
 
 export default function Generate() {
   const [text, setText] = useState('');
   const [flashcards, setFlashcards] = useState([]);
-/*   const [setName, setSetName] = useState(''); */
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [userId, setUserId] = useState('');
-  const [decks, setDecks] = useState([]);
-
+/*   const [decks, setDecks] = useState([]); */
+  const navigate = useNavigate();
   const fetchUserData = async () => {
     const response = await fetch('http://localhost:5000/api/user', {
       method: 'GET',
       credentials: 'include',
     });
+    if (response.status === 401) {
+      // If the user is not authenticated, redirect to login
+      navigate('/Authenticate');
+      return;
+    }
     const data = await response.json();
     setUserId(data._id); 
   };
@@ -37,7 +37,7 @@ export default function Generate() {
       { method: 'GET', credentials: 'include' }
     );
     const data = await response.json();
-    setDecks(data);
+ /*    setDecks(data); */
   };
 
   useEffect(() => {
@@ -79,127 +79,105 @@ export default function Generate() {
       alert('An error occurred while generating flashcards. Please try again.');
     }
   };
-
-/*   const handleSaveDeck = async () => {
-    console.log(
-      'Saving deck:', { setName, flashcards, userId }
-    )
-    try {
-      const response = await fetch('http://localhost:5000/api/saveDeck', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ setName, cards: flashcards, userId }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save deck');
-      }
-
-      setDialogOpen(false);
-      fetchDecks(); // Reload decks after saving
-    } catch (error) {
-      console.error('Error saving deck:', error);
-    }
-  }; */
-
-  const handleOpenDialog = () => setDialogOpen(true);
-  const handleCloseDialog = () => setDialogOpen(false);
-
+  const handleHomeClick = () => {
+    navigate('/dashboard');
+  };
   return (
-    <Container maxWidth="md">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Generate Flashcards
-        </Typography>
-        <TextField
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          label="Enter text"
-          fullWidth
-          multiline
-          rows={4}
-          variant="outlined"
-          sx={{ mb: 2 }}
-        />
-        <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
-          Generate Flashcards
-        </Button>
-      </Box>
-
-      {flashcards.length > 0 && (
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h5" component="h2" gutterBottom>
-            Generated Flashcards
+    <>
+      <nav className="dashboard-navbar">
+        <div className="nav-left" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>FlashMaster</div>
+      </nav>
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        {/* Form Section */}
+        <Box sx={{ bgcolor: '#f5f5f5', p: 3, borderRadius: 2, boxShadow: 2 }}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Generate Flashcards
           </Typography>
-          <Grid container spacing={2}>
-            {flashcards.map((flashcard, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                {flashcard.flip ? (
-                  <Card onClick={() => handleFlip(index)} sx={{ cursor: 'pointer' }}>
-                    <CardContent>
-                      <Typography variant="h6" sx={{ mt: 2 }}>Answer:</Typography>
-                      <Typography>{flashcard.back}</Typography>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <Card onClick={() => handleFlip(index)} sx={{ cursor: 'pointer' }}>
-                    <CardContent>
-                      <Typography variant="h6">Question:</Typography>
-                      <Typography>{flashcard.front}</Typography>
-                    </CardContent>
-                  </Card>
-                )}
-              </Grid>
-            ))}
-          </Grid>
-      {/*     <Button variant="contained" color="secondary" onClick={handleOpenDialog} sx={{ mt: 4 }}>
-            Save Deck
-          </Button> */}
-        </Box>
-      )}
-
-{/*       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Save Deck</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Enter a name for your flashcard set.
-          </DialogContentText>
           <TextField
-            autoFocus
-            margin="dense"
-            label="Deck Name"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            label="Enter text"
             fullWidth
+            multiline
+            rows={4}
             variant="outlined"
-            value={setName}
-            onChange={(e) => setSetName(e.target.value)}
+            sx={{ mb: 2 }}
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">Cancel</Button>
-          <Button onClick={handleSaveDeck} color="secondary">Save</Button>
-        </DialogActions>
-      </Dialog> */}
-
-{/*       {decks.length > 0 && (
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h5" gutterBottom>Your Decks</Typography>
-          <Grid container spacing={2}>
-            {decks.map((deck) => (
-              <Grid item xs={12} sm={6} md={4} key={deck._id}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6">{deck.deckName}</Typography>
-                    <Typography>{deck.cards.length} flashcards</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            fullWidth
+            sx={{ py: 1.5 }}
+          >
+            Generate Flashcards
+          </Button>
         </Box>
-      )} */}
-    </Container>
+
+        {/* Flashcards Section */}
+        {flashcards.length > 0 && (
+          <Box sx={{ mt: 6 }}>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Generated Flashcards
+            </Typography>
+            <Grid container spacing={3}>
+              {flashcards.map((flashcard, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      transition: 'transform 0.3s ease',
+                      '&:hover': {
+                        transform: 'scale(1.05)',
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ p: 2 }}>
+                      {flashcard.flip ? (
+                        <>
+                          <Typography
+                            variant="h6"
+                            color="primary"
+                            sx={{ mb: 1 }}
+                          >
+                            Answer:
+                          </Typography>
+                          <Typography variant="body1">
+                            {flashcard.back}
+                          </Typography>
+                        </>
+                      ) : (
+                        <>
+                          <Typography
+                            variant="h6"
+                            color="primary"
+                            sx={{ mb: 1 }}
+                          >
+                            Question:
+                          </Typography>
+                          <Typography variant="body1">
+                            {flashcard.front}
+                          </Typography>
+                        </>
+                      )}
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => handleFlip(index)}
+                        sx={{ mx: 'auto', mb: 2 }}
+                      >
+                        Flip Card
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        )}
+      </Container>
+    </>
   );
 }
