@@ -217,7 +217,7 @@ js
 
 ## Future Improvements
 
-- *AI-Enhanced Learning*: Introduce AI-powered spaced repetition to optimize learning intervals.
+- *AI-Enhanced Learning*: Integrate AI-powered spaced repetition to optimize learning intervals.
 - *Premium Features*: Offer advanced metrics, collaborative decks, and enhanced learning tools for premium users.
 - *Mobile App*: Develop a dedicated mobile application for iOS and Android.
 - *Offline Mode*: Enable offline access to flashcards and decks.
